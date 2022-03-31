@@ -1,0 +1,23 @@
+% extract and concatenate deep features
+alexnet_fc = 'fc7';
+inc_fc = 'predictions';
+net = open('C:\Users\loand\Documents\GitHub\Tesisti\AD_classification\ADNI_fMRI\models\alexnet___EP4__MBS16__AUG0.mat');
+alexnet = alexnet.trainedNet;
+
+net = open('C:\Users\loand\Documents\GitHub\Tesisti\AD_classification\ADNI_fMRI\models\resnet101__EP1__MBS8__AUG0.mat');
+resnet = alexnet.trainedNet;
+
+net = open('C:\Users\loand\Documents\GitHub\Tesisti\AD_classification\ADNI_fMRI\models\inceptionresnetv2__EP1__MBS8__AUG0.mat');
+inception = alexnet.trainedNet;
+
+imds = open('imds.mat');
+%imdsTrain = open('imdsTrain.mat');
+%imdsValid = open('imdsValid.mat');
+%imdsTest = open('imdsTest.mat');
+
+labels = imds.labels;
+featuresAlex = activations(alexnet, imds, alexnet_fc, 'MiniBatchSize', 32);
+featuresInc = activations(resnet, imds, inc_fc, 'MiniBatchSize', 32);
+featuresInc = activations(inception, imds, inc_fc, 'MiniBatchSize', 32);
+
+featuresCombined = [featuresAlex;
